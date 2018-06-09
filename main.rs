@@ -27,7 +27,18 @@ enum Instruction{
     Andi(RegId,  RegId, Const),
     Ori(RegId,   RegId, Const),
     Xori(RegId,  RegId, Const),
-    Lui(RegId,   Const)
+    Lui(RegId,   Const), 
+    Syscall
+}
+
+struct Program{
+    text: Vec<Instruction>
+}
+
+impl Program{
+    fn new() -> Program{
+        Program {text: Vec::new() }
+    }
 }
 
 fn execute(ms: &mut MachineState, ist: Instruction){
@@ -51,12 +62,24 @@ fn execute(ms: &mut MachineState, ist: Instruction){
         Ori(r1,r2,c)   => ms.register[r1] = ms.register[r2] | c,
         Xori(r1,r2,c)  => ms.register[r1] = ms.register[r2] ^ c,
         Lui(r1,c)      => ms.register[r1] |= c << 16,
+        Syscall        => systemcall(ms)
+    }
+}
+
+fn systemcall(ms: &mut MachineState){
+    print!("System Call\n")
+}
+
+fn execute_program(ms: &mut MachineState, prg: Program){
+    for ist in prg.text{
+        execute(ms, ist);
+        show(ms);
     }
 }
 
 fn show(ms: &MachineState){
     for i in 0..N_REGISTER {
-        print!("register[{}]={} ",i, ms.register[i]);
+        print!("register[{}]={}\t",i, ms.register[i]);
         if i%4 == 3 {
             print!("\n");
         }
@@ -66,7 +89,9 @@ fn show(ms: &MachineState){
 fn main() {
     use Instruction::*;
     let mut ms = MachineState { register : [0; 32], memory : [0; (1<<16)] };
-    execute(&mut ms, Addi(0,1,10));
+    let mut prg = Program::new();
+    prg.text.push(Addi(0, 1, 10));
+    execute_program(&mut ms, prg);
     show(&ms);
 }
 
