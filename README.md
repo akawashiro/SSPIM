@@ -1,5 +1,5 @@
 # SSPIM
-MIPSバイナリが最低限動くエミュレータを作る。  
+最終目標:MIPSバイナリが最低限動くエミュレータを作る。  
 
 ## クロスコンパイル
 [http://inaz2.hatenablog.com/entry/2015/12/01/204201](http://inaz2.hatenablog.com/entry/2015/12/01/204201)を参考にしてMIPSのバイナリを出力するクロスコンパイラを作った。  
@@ -19,3 +19,4 @@ sudo qemu-mips-static -L ./local/mips-linux-gnu/ ./a.out
 - ELFファイルの実行について調べる。
 - 実装するシステムコール(特にメモリ確保)について、その方法を調べる。
 - 頑張る
+- とりあえずテキスト形式でMIPSのアセンブリを与えて実行できるようにする
